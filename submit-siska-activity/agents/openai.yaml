@@ -1,4 +1,4 @@
 interface:
   display_name: "Submit SISKA Activity"
-  short_description: "Submit activity records to SISKA safely"
-  default_prompt: "Use $submit-siska-activity to add and verify an activity or achievement entry in SISKA."
+  short_description: "Prepare, submit, and verify SISKA activities"
+  default_prompt: "Use $submit-siska-activity to inspect supporting documents, prepare a safe submission plan, and submit and verify one or more SISKA activities."

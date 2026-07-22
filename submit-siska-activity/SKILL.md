@@ -1,53 +1,83 @@
 ---
 name: submit-siska-activity
-description: Add and verify student activity or achievement records in STT-NF SISKA through an authenticated browser session. Use when the user asks an AI agent to submit, upload, or register an Aktivitas dan Prestasi entry, including its academic period, activity category, bilingual name, achievement details, dates, organizer, and supporting certificate or document.
+description: Inspect certificates and supporting files, plan, submit, and verify one or more STT-NF SISKA student activity or achievement records through the user's authenticated Chrome session. Use for SISKA Aktivitas dan Prestasi work involving document-derived dates, Indonesian and English activity names, academic-period inference, activity-category and point selection, PDF preparation or upload, duplicate checks, batch submission, and post-save verification.
 ---
 
 # Submit SISKA Activity
 
-Create one activity or achievement entry in SISKA and verify that it appears in the intended academic period. Use the user's existing authenticated Chrome session; never request, expose, or store SISKA credentials.
+Submit SISKA activities through the user's existing authenticated Chrome session. Never request, expose, or store credentials. Treat every save as a production write: preflight it, save it once, and verify it before continuing.
 
-## Collect the entry
+## Load the relevant references
 
-Obtain these values before editing the form:
+- Read [references/activity-catalog.md](references/activity-catalog.md) when selecting an academic period, dropdown value, activity category, or point value.
+- Read [references/chrome-workflow.md](references/chrome-workflow.md) before controlling the SISKA form; it records stable selectors and UI failure modes discovered in a successful workflow.
+- Read [references/batch-submission.md](references/batch-submission.md) for two or more entries, document conversions, previews, and final audits.
 
-- Academic period.
-- Exact `Jenis & Kelompok Aktivitas` choice.
-- Indonesian activity name and, when available, English activity name.
-- Achievement level and optional ranking.
-- Activity type: `Akademik` or `Non Akademik`.
-- Optional position, location, organizer, decree number/date, and supporting link.
-- Start date and end date in `DD-MM-YYYY` format.
-- Supporting-document type and local JPG, JPEG, or PDF file.
+## Build the submission record
 
-Ask only for required values that are missing. Infer names or translations only when the user explicitly permits it. Confirm that the start date is not after the end date and that the supporting file is no larger than the limit shown by SISKA (approximately 2.1 MB in the recorded workflow).
+Inspect the supporting document before opening the form. Record:
 
-## Submit the entry
+- Absolute file path and exact filename.
+- Start and end dates in `DD-MM-YYYY`. If the document shows one activity date, set both dates to that value.
+- Academic period derived from the start date and verified against the period reference. Do not guess in July/August overlap cases.
+- Indonesian `Nama Aktivitas` that accurately matches the certificate or activity.
+- Natural English `Nama Aktivitas (En)`. Translate when the user permits inference; preserve product, company, program, and credential names.
+- Exact activity category and expected points.
+- Achievement level, optional rank, `Akademik` or `Non Akademik`, organizer, and any supplied position, location, decree, link, or responsible person.
+- Supporting-document type.
 
-1. Open `https://siska.nurulfikri.ac.id/siakad/list_aktivitasmhs` in the user's authenticated Chrome session. If SISKA requires sign-in, pause and ask the user to sign in directly.
-2. Select the intended academic period and search for an existing row with the same activity name and date. If a likely duplicate exists, stop and ask whether to continue.
-3. Click `Tambah` to open the detail form.
-4. In `Jenis & Kelompok Aktivitas`, click the search button, locate the exact requested row, verify its activity type and points, then click that row's `Pilih` checkmark.
-5. Set `Periode Akademik` to the requested period. Do not rely on the default value.
-6. Fill `Nama Aktivitas` and `Nama Aktivitas (En)` without copying example values from prior records.
-7. Select `Tingkat Prestasi`. Set `Peringkat` only when it applies. Select `Jenis Kegiatan`, then fill any provided position, location, and organizer values.
-8. Fill `Tanggal Mulai Aktivitas` and `Tanggal Akhir Aktivitas`. Re-read both fields after date-picker or keyboard entry to catch date-format changes.
-9. Select `Jenis Dokumen Pendukung`, fill conditional decree fields when applicable, and upload the supplied file. Confirm that the chosen filename appears in the form.
-10. Review the category, period, names, achievement details, dates, organizer, and filename. Ask for final confirmation unless the user already explicitly authorized immediate submission of these exact values.
-11. Click `Simpan`, then click `Ya, Yakin` in the SISKA confirmation dialog. Wait for the save to finish; do not click the button repeatedly.
+Ask only for material values that cannot be established from the document, the supplied knowledge base, or explicit user instructions. Reject a start date later than the end date.
 
-## Verify the result
+## Prepare supporting files
 
-1. Confirm that SISKA displays the saved detail state or assigns a detail URL.
-2. Click `Kembali ke Daftar`.
-3. Select the entry's academic period again, because the list may reset to a different period.
-4. Search or refresh until the row appears. Verify the activity name, date, points, and validation status.
-5. Report the saved result and current status. If the row is not found, report the mismatch and do not create a second entry automatically.
+Accept only formats shown by SISKA: JPG, JPEG, or PDF. Prefer PDF for certificates when the user requests it.
+
+- Keep every source file unchanged.
+- Create converted or compressed copies with descriptive filenames.
+- Keep each upload at or below the current form limit; the verified workflow displayed `2.097152 MB` (2,097,152 bytes).
+- Render and visually inspect every generated PDF for cropping, blur, missing pages, or rotation errors.
+- Confirm the final absolute path, basename, format, and byte size before browser automation.
+
+Use the `pdf` skill when PDF conversion, compression, rendering, or visual verification is required.
+
+## Preflight SISKA
+
+1. Open `https://siska.nurulfikri.ac.id/siakad/list_aktivitasmhs` in the active authenticated Chrome session.
+2. If redirected to sign-in, pause and ask the user to sign in directly.
+3. Select the intended period explicitly; the page default is not authoritative.
+4. Search for a row matching period, activity name, and start date. Stop on a likely duplicate unless the user explicitly authorizes another entry.
+5. For a batch, preflight all involved periods and present one complete preview before the first save, unless the user already approved those exact entries.
+
+## Fill and review the form
+
+1. Click `Tambah` and wait for the form to finish loading.
+2. Select the exact `Jenis & Kelompok Aktivitas` row. Verify its label and points after the modal closes.
+3. Select `Periode Akademik`; never rely on its default.
+4. Fill both activity-name fields, achievement level, optional rank, activity type, and supplied optional fields.
+5. Select start and end dates with the SISKA datepicker. Re-read both rendered values after selection. For a single-day activity, independently select the same date in both fields.
+6. Select the supporting-document type before uploading; `Choose File` can remain disabled until this is set.
+7. Upload the absolute local path through the file chooser and verify the selected basename.
+8. Compare every populated field with the submission record. Leave unspecified optional fields blank.
+9. Ask for final confirmation unless the user already authorized saving these exact values.
+
+Follow the locator and control guidance in [references/chrome-workflow.md](references/chrome-workflow.md). If a date or category widget enters an inconsistent state, abandon the unsaved form, reopen a clean form, and refill it rather than forcing a questionable value.
+
+## Save and verify
+
+1. Click `Simpan` once, then `Ya, Yakin` once.
+2. Wait for `Penambahan data Aktivitas Mahasiswa berhasil` or the saved detail state.
+3. Verify the detail view: category and points, period, both names, level, rank, activity type, organizer/location, both dates, document type, exact filename, and validation status.
+4. Click `Kembali ke Daftar` and reselect the intended period because SISKA may reset it.
+5. Verify exactly one row with the expected name, displayed start date, points, and `Belum Divalidasi` status.
+6. If any detail or list check fails, stop. Do not create a replacement or the next batch entry automatically.
+
+For a batch, process entries sequentially and perform the full detail-and-list verification after each save. Run the cross-period audit in [references/batch-submission.md](references/batch-submission.md) when all entries finish.
 
 ## Handle failures
 
-- Pause for user authentication instead of handling passwords or one-time codes.
-- Correct missing required fields or rejected date formats before resubmitting.
-- Ask for a smaller or supported file when upload validation fails.
-- Preserve the form and report the visible message when SISKA rejects the save.
-- Never delete or overwrite another activity while completing this workflow.
+- Preserve visible SISKA error messages and report the field or stage that failed.
+- Pause for authentication; never handle passwords or one-time codes.
+- Reopen a clean unsaved form when a modal or datepicker becomes stale.
+- Recreate an unsupported, oversized, cropped, or blurry document copy without modifying its source.
+- Never delete, overwrite, or edit an unrelated activity.
+- Never retry a save when its outcome is uncertain; inspect the list first.

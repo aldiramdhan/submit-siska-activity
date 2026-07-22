@@ -38,7 +38,36 @@ Skill tidak menyimpan username, password, kode OTP, atau data login SISKA.
 
 ## Instalasi
 
+### Instalasi cepat
+
+Jika Node.js dan npm tersedia, pasang skill tanpa clone atau copy manual:
+
+```bash
+npx skills add aldiramdhan/submit-siska-activity --skill submit-siska-activity -g -y
+```
+
+Pilih agent tertentu dengan opsi `-a`:
+
+```bash
+# OpenAI Codex
+npx skills add aldiramdhan/submit-siska-activity --skill submit-siska-activity -g -a codex -y
+
+# Claude Code
+npx skills add aldiramdhan/submit-siska-activity --skill submit-siska-activity -g -a claude-code -y
+```
+
+| Opsi | Fungsi |
+|---|---|
+| `--skill submit-siska-activity` | Memilih skill dalam repository |
+| `-g` | Memasang skill pada direktori user |
+| `-a` | Menentukan agent tujuan |
+| `-y` | Melewati pertanyaan konfirmasi |
+
+CLI `skills` mendukung GitHub shorthand `owner/repo`. Lihat [dokumentasi Skills CLI](https://www.skills.sh/docs/cli) untuk daftar agent dan opsi lain.
+
 ### Clone repository
+
+Gunakan cara manual berikut jika Node.js atau npm tidak tersedia:
 
 ```bash
 git clone https://github.com/aldiramdhan/submit-siska-activity.git

@@ -1,6 +1,6 @@
 ---
 name: submit-siska-activity
-description: Add and verify student activity or achievement records in STT-NF SISKA through an authenticated browser session. Use when the user asks Codex to submit, upload, or register an Aktivitas dan Prestasi entry, including its academic period, activity category, bilingual name, achievement details, dates, organizer, and supporting certificate or document.
+description: Add and verify student activity or achievement records in STT-NF SISKA through an authenticated browser session. Use when the user asks an AI agent to submit, upload, or register an Aktivitas dan Prestasi entry, including its academic period, activity category, bilingual name, achievement details, dates, organizer, and supporting certificate or document.
 ---
 
 # Submit SISKA Activity
